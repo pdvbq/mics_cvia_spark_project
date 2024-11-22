@@ -1,7 +1,7 @@
 site_name: "CVIA SPARK Project (Alpha24)"
 site_url: https://pdvbq.github.io/mics_cvia_spark_project/
 repo_url: https://github.com/pdvbq/mics_cvia_spark_project
-repo_name: snt-arg/tello_suite
+repo_name: pdvbq/mics_cvia_spark_project
 theme:
   features:
     - content.code.copy
