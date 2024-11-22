@@ -32,7 +32,8 @@ markdown_extensions:
   - attr_list
   - md_in_html
   - pymdownx.inlinehilite
-  - pymdownx.tasklist
+  - pymdownx.tasklist:
+      custom_checkbox: true
   - pymdownx.snippets
   - pymdownx.details
   - pymdownx.superfences
