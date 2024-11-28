@@ -31,4 +31,6 @@ To run a python script with the isolated environment you have 2 ways.
 
 !!! note
 
-    Todo by Pavel
+    Conda can be installed as a minimal package by following the guide [here](https://docs.anaconda.com/miniconda/).
+
+Upon cloning the repository, run `conda env create -f environment.yml` while inside the repository. Once the environment is set up, activate it with `conda activate spark`.
