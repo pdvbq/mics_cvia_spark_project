@@ -35,6 +35,10 @@ def download_dataset(
     dataset_zip = os.path.join(data_dir, f"{name}.zip")
     dataset_path = os.path.join(data_dir, name)
 
+    if os.path.exists(dataset_path):
+        logger.info(f"{dataset_path} already exists. Not doing anything")
+        return True
+
     if not os.path.exists(dataset_zip):
         logger.info(f"Downloading dataset from {url}")
         try:
