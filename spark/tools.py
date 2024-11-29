@@ -1,5 +1,12 @@
 import requests
-from tqdm import tqdm
+from rich.progress import (
+    Progress,
+    BarColumn,
+    DownloadColumn,
+    TextColumn,
+    TimeRemainingColumn,
+    TaskProgressColumn,
+)
 import zipfile
 import os
 import logging
@@ -79,19 +86,19 @@ def __download_url(url: str, output_path: str) -> None:
     total_size = int(response.headers.get("content-length", 0))
     chunk_size = 1024
 
-    with (
-        open(output_path, "wb") as file,
-        tqdm(
-            desc=f"Downloading {output_path}",
-            total=total_size,
-            unit="B",
-            unit_scale=True,
-            unit_divisor=1024,
-        ) as bar,
-    ):
-        for data in response.iter_content(chunk_size=chunk_size):
-            file.write(data)
-            bar.update(len(data))
+    with open(output_path, "wb") as file:
+        with Progress(
+            TextColumn("[bold blue]Downloading:[/bold blue]"),
+            BarColumn(),
+            DownloadColumn(),
+            TimeRemainingColumn(),
+            transient=True,
+        ) as progress:
+            task = progress.add_task(f"[green]{output_path}", total=total_size)
+
+            for data in response.iter_content(chunk_size=chunk_size):
+                file.write(data)
+                progress.update(task, advance=len(data))
 
 
 def __unzip_dataset(dataset_path: str, extract_to: str) -> None:
@@ -102,20 +109,16 @@ def __unzip_dataset(dataset_path: str, extract_to: str) -> None:
         extract_to(str): where to extract
     """
     with zipfile.ZipFile(dataset_path, "r") as zip_ref:
-        # Get the list of files in the zip
         files = zip_ref.namelist()
 
-        # Initialize the tqdm progress bar
-        with tqdm(total=len(files), desc="Extracting", unit="file") as pbar:
+        with Progress(
+            TextColumn("[bold blue]Extracting:[/bold blue]"),
+            BarColumn(),
+            TaskProgressColumn(),
+            transient=True,
+        ) as progress:
+            task = progress.add_task(f"[green]{dataset_path}", total=len(files))
+
             for file in files:
-                # Extract the file without creating the parent directory of the zip
                 zip_ref.extract(file, extract_to)
-
-                # Move files to the main directory if they are nested
-                full_path = os.path.join(extract_to, file)
-                if os.path.isfile(full_path):
-                    new_path = os.path.join(extract_to, os.path.basename(file))
-                    os.rename(full_path, new_path)
-                    os.rmdir(os.path.dirname(full_path))
-
-                pbar.update(1)
+                progress.update(task, advance=1)
