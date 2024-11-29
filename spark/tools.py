@@ -50,7 +50,7 @@ def download_dataset(
     if not os.path.exists(dataset_path):
         logger.info("Unzipping dataset")
         try:
-            __unzip_dataset(dataset_zip, dataset_path)
+            __unzip_dataset(dataset_zip, os.path.join(data_dir))
         except zipfile.BadZipfile:
             logger.error(
                 "Failed to unzip dataset. Mostlikely due to bad/corrupted file. Have you used the correct URL?"
