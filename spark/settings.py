@@ -3,6 +3,7 @@ from dataclasses import dataclass
 
 @dataclass
 class Settings:
+    stream1_url = "TO FILL IN"
     data_root_dir = "data"
     stream1_dir = "stream1"
     stream2_dir = "stream2"
