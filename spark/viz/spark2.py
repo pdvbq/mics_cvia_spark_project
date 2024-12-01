@@ -11,19 +11,18 @@ from scipy.spatial.transform import Rotation
 
 class Camera:
     # """" Utility class for accessing camera parameters. """
-    k = [[1745.8644618517126, 0, 737.2727957367897],
-         [0, 1745.8644618517126, 528.4719595313072],
-         [0, 0, 1]]
+    k = [
+        [1745.8644618517126, 0, 737.2727957367897],
+        [0, 1745.8644618517126, 528.4719595313072],
+        [0, 0, 1],
+    ]
     K = np.array(k)
 
 
 def project(q, r):
-    """ Projecting points to image frame to draw axes """
+    """Projecting points to image frame to draw axes"""
     # reference points in satellite frame for drawing axes
-    p_axes = np.array([[0, 0, 0, 1],
-                       [1, 0, 0, 1],
-                       [0, 1, 0, 1],
-                       [0, 0, 1, 1]])
+    p_axes = np.array([[0, 0, 0, 1], [1, 0, 0, 1], [0, 1, 0, 1], [0, 0, 1, 1]])
     points_body = np.transpose(p_axes)
     # transformation to camera frame
     pose_mat = np.hstack((Rotation.from_quat(q).as_matrix(), np.expand_dims(r, 1)))
@@ -37,31 +36,27 @@ def project(q, r):
 
 
 def visualize(img, q, r, ax=None):
-    """ Visualizing image, with ground truth pose with axes projected to training image. """
+    """Visualizing image, with ground truth pose with axes projected to training image."""
     if ax is None:
         ax = plt.gca()
 
     ax.imshow(img)
     xa, ya = project(q, r)
     scale = 150
-    c = np.array([[xa[0]],
-                  [ya[0]]
-                  ])
-    p = np.array([[xa[1], xa[2], xa[3]],
-                  [ya[1], ya[2], ya[3]]
-                  ])
+    c = np.array([[xa[0]], [ya[0]]])
+    p = np.array([[xa[1], xa[2], xa[3]], [ya[1], ya[2], ya[3]]])
     v = p - c
     v = scale * v / np.linalg.norm(v)
-    ax.arrow(c[0, 0], c[1, 0], v[0, 0], v[1, 0], head_width=10, color='r')
-    ax.arrow(c[0, 0], c[1, 0], v[0, 1], v[1, 1], head_width=10, color='g')
-    ax.arrow(c[0, 0], c[1, 0], v[0, 2], v[1, 2], head_width=10, color='b')
+    ax.arrow(c[0, 0], c[1, 0], v[0, 0], v[1, 0], head_width=10, color="r")
+    ax.arrow(c[0, 0], c[1, 0], v[0, 1], v[1, 1], head_width=10, color="g")
+    ax.arrow(c[0, 0], c[1, 0], v[0, 2], v[1, 2], head_width=10, color="b")
     return
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     home = os.path.expanduser("~")
-    root_dir = 'datasets/spark_2022_stream_2'
-    category = 'train'
+    root_dir = "datasets/spark_2022_stream_2"
+    category = "train"
     dataset_dir = os.path.join(home, root_dir, category)
     dir_list = glob.glob(os.path.join(dataset_dir, "images", "*", ""), recursive=True)
     # visualise image from first directory
@@ -69,8 +64,8 @@ if __name__ == '__main__':
     processed_file_path = os.path.join(dataset_dir, category + ".csv")
 
     data = pd.read_csv(processed_file_path)
-    image_path = os.path.join(dataset_dir, 'images', traj_dir)
-    files = [os.path.basename(x) for x in glob.glob(os.path.join(image_path, '*.png'))]
+    image_path = os.path.join(dataset_dir, "images", traj_dir)
+    files = [os.path.basename(x) for x in glob.glob(os.path.join(image_path, "*.png"))]
 
     rows = 3
     cols = 3
@@ -84,20 +79,20 @@ if __name__ == '__main__':
             img_path = os.path.join(image_path, files[k])
             im_read = cv2.imread(img_path)
             image = cv2.cvtColor(im_read, cv2.COLOR_BGR2RGB)
-            i_data = data.loc[data['filename'] == image_id]
-            Tx = i_data['Tx'].values.squeeze()
-            Ty = i_data['Ty'].values.squeeze()
-            Tz = i_data['Tz'].values.squeeze()
+            i_data = data.loc[data["filename"] == image_id]
+            Tx = i_data["Tx"].values.squeeze()
+            Ty = i_data["Ty"].values.squeeze()
+            Tz = i_data["Tz"].values.squeeze()
             # Qx, Qy, Qz, Qw
-            Qx = i_data['Qx'].values.squeeze()
-            Qy = i_data['Qy'].values.squeeze()
-            Qz = i_data['Qz'].values.squeeze()
-            Qw = i_data['Qw'].values.squeeze()
+            Qx = i_data["Qx"].values.squeeze()
+            Qy = i_data["Qy"].values.squeeze()
+            Qz = i_data["Qz"].values.squeeze()
+            Qw = i_data["Qw"].values.squeeze()
 
             r = np.array([Tx, Ty, Tz])
             q = np.array([Qx, Qy, Qz, Qw])
             visualize(image, q, r, ax=axes[i][j])
-            axes[i][j].axis('off')
+            axes[i][j].axis("off")
             k += 1
     fig.tight_layout()
     plt.show()
