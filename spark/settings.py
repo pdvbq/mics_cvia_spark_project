@@ -3,7 +3,8 @@ from dataclasses import dataclass
 
 @dataclass
 class Settings:
-    stream1_url = "TO FILL IN"
+    stream1_url = "https://uniluxembourg-my.sharepoint.com/:u:/g/personal/pedro_bastos_uni_lu/EfXBeG7PFypEs5sM3NzMB0MByiEaKFaoD8WKfzQN_6UPog?download=1"
+    stream2_url = ""
     data_root_dir = "data"
     stream1_dir = "stream1"
     stream2_dir = "stream2"
