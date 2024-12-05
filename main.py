@@ -1,5 +1,5 @@
-from spark.settings import Settings
 import spark.cli.fetch as fetch
+import spark.cli.pipeline as pipeline
 import spark.cli.generate as generate
 import logging
 import coloredlogs
@@ -17,6 +17,7 @@ def main():
     app = typer.Typer()
     app.add_typer(fetch.app, name="fetch")
     app.add_typer(generate.app, name="generate")
+    app.add_typer(pipeline.app, name="pipeline")
     app()
 
 
