@@ -23,7 +23,7 @@ class DatasetCfg:
 @dataclass
 class FetchDatasetCfg:
     data_dir = "data"
-    stream1_url = "https://uniluxembourg-my.sharepoint.com/:u:/g/personal/pedro_bastos_uni_lu/EfXBeG7PFypEs5sM3NzMB0MByiEaKFaoD8WKfzQN_6UPog?download=1"
+    stream1_url = "https://uniluxembourg-my.sharepoint.com/:u:/g/personal/0200566850_uni_lu/EbTNBxOOdhxNoZC-mtqnfL8BW705Gold48M6p6kLhaPy9w?download=1"
     stream2_url = ""
     stream1_dir = "stream1"
     stream2_dir = "stream2"

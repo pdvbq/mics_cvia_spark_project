@@ -23,9 +23,9 @@ def __generate_yolo_cfg(filename: str, dataset_dir: str, settings: Settings) -> 
     """
     config = {
         "path": dataset_dir,
-        "train": "train",
-        "val": "val",
-        "test": "test",
+        "train": "images/train",
+        "val": "images/val",
+        "test": "images/test",
         "names": {},
     }
 
