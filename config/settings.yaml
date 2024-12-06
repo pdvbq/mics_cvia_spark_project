@@ -1,7 +1,7 @@
 download:
   data_dir: "data"
   streams:
-    stream1: "https://uniluxembourg-my.sharepoint.com/:u:/g/personal/0200566850_uni_lu/EbTNBxOOdhxNoZC-mtqnf"
+    stream1: "https://uniluxembourg-my.sharepoint.com/:u:/g/personal/0200566850_uni_lu/EbTNBxOOdhxNoZC-mtqnfL8BW705Gold48M6p6kLhaPy9w?download=1"
     stream2: ""
   stream_dirs:
     stream1: "stream1"
