@@ -1,6 +1,6 @@
 import typer
 import spark.tools as tools
-from spark.settings import Settings
+from spark.settings import settings
 
 app = typer.Typer()
 
@@ -8,12 +8,18 @@ app = typer.Typer()
 @app.command()
 def stream1():
     tools.download_dataset(
-        Settings.fetch_cfg.stream1_url, "stream1", Settings.fetch_cfg.data_dir, True
+        settings.download_cfg.streams["stream1"],
+        "stream1",
+        settings.download_cfg.data_dir,
+        True,
     )
 
 
 @app.command()
 def stream2():
     tools.download_dataset(
-        Settings.fetch_cfg.stream2_url, "stream2", Settings.fetch_cfg.data_dir, True
+        settings.download_cfg.streams["stream2"],
+        "stream2",
+        settings.download_cfg.data_dir,
+        True,
     )
