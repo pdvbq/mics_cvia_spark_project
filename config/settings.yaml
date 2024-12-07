@@ -24,9 +24,12 @@ dataset:
 pipeline:
   frameworks:
     yolo:
-      model_input: "trained.pt"
+      model_input: "yolo11n.pt"
       dataset_metadata: "./data/stream1/stream1.yaml"
       input_size: [1024, 1024]
       train: 
-        epochs: 2
-        save_file: "./trained.pt"
+        epochs: 10
+        batch: 20
+      test:
+        source: "./data/stream1/images/test/"
+        output: "./data/stream1/prediction/predictions.csv"
