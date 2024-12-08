@@ -24,7 +24,7 @@ dataset:
 pipeline:
   frameworks:
     yolo:
-      model_input: "yolo11n.pt"
+      model_input: "./runs/detect/train5/weights/best.pt"
       dataset_metadata: "./data/stream1/stream1.yaml"
       input_size: [1024, 1024]
       train: 
@@ -32,4 +32,4 @@ pipeline:
         batch: 100
       test:
         source: "./data/stream1/images/test/"
-        output: "./data/stream1/prediction/predictions.csv"
+        output: "./data/stream1/prediction/submission.csv"

@@ -1,8 +1,11 @@
 from coloredlogs import logging
-import cv2
+import os
 from ultralytics import YOLO
-from spark.pipelines.pipeline import Pipeline
 import csv
+from spark.pipelines.pipeline import Pipeline
+from spark.converters.labels import yolo_to_default_format
+import csv
+from rich.progress import track
 
 logger = logging.getLogger(__name__)
 
@@ -24,15 +27,24 @@ class YoloPipeline(Pipeline):
 
     def test(self, **kwargs):
         source = kwargs["test"]["source"]
-        results = self.model.predict(source=source, stream=True)
+        results = self.model.predict(source=source, stream=True, verbose=False)
         file = kwargs["test"]["output"]
 
-        # TODO: Currently, this is saving as a yolo format.
-        # The advised format is image_name, class, bbox
+        total_imgs = len(os.listdir(source))
 
-        for result in results:
-            # This saves as class_id bbox (using yolo format)
-            result.save_txt(file)
+        with open(file, "w") as f:
+            writer = csv.writer(f)
+            writer.writerow(["filename", "class", "bbox"])
+            for result in track(results, description="Predicting...", total=total_imgs):
+                if result.boxes is None:
+                    continue
+                filename = os.path.basename(result.path)
+                for box in result.boxes:
+                    cls = result.names[box.cls.tolist()[0]]
+                    xyxy = yolo_to_default_format(
+                        *result.orig_shape, *result.boxes.xywhn.tolist()[0]
+                    )
+                    writer.writerow([filename, cls, xyxy])
 
     def validate(self, **kwargs):
         data = kwargs["dataset_metadata"]
