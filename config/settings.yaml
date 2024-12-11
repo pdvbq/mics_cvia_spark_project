@@ -28,8 +28,8 @@ pipeline:
       dataset_metadata: "./data/stream1/stream1.yaml"
       input_size: [1024, 1024]
       train: 
-        epochs: 10
-        batch: 100
+        epochs: 100
+        batch: 200
       test:
         source: "./data/stream1/images/test/"
         output: "./data/stream1/prediction/predictions.csv"

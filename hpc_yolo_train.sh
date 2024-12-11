@@ -4,13 +4,14 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH -c 17
 #SBATCH -G 1
-#SBATCH --time=02:00:00
-#SBATCH -p gpu
+#SBATCH --time=10:00:00
+#SBATCH --partition gpu
+#SBATCH --qos normal
+
 
 print_error_and_exit() { echo "***ERROR*** $*"; exit 1; }
 module purge || print_error_and_exit "No 'module' command"
-module load  lang/Anaconda3/2020.11 || print_error_and_exit "Anaconda module not found"
 
-conda env create -f environment.yml
-conda activate spark
+nvidia-smi
+
 uv run main.py pipeline yolo train
