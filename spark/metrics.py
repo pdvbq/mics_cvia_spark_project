@@ -193,9 +193,9 @@ class FScore:
             >>> y_true = torch.tensor([1,0,1,1,0,1,0]) # Ground truth values
             >>> y_pred = torch.tensor([1,0,1,0,0,1,1]) # Predicted values
             >>> 
-            >>> f1_score_metric = FScore()
+            >>> f1_score_metric = FScore(beta)
             >>> 
-            >>> f1_score = f1_score_metric(y_true, y_pred, beta)
+            >>> f1_score = f1_score_metric(y_true, y_pred)
 
         """
         # Ensure inputs are integer
@@ -271,9 +271,9 @@ class IoU:
             >>> y_pred = torch.tensor([[4,2.5,4,5],[2,3,4,2]]) # Predicted values
             >>> form = "YOLO" # yolo format
             >>> 
-            >>> iou_metric = IoU()
+            >>> iou_metric = IoU(form)
             >>> 
-            >>> iou = iou_metric(y_true, y_pred, form)
+            >>> iou = iou_metric(y_true, y_pred)
         """
 
         # Ensure input is float32
