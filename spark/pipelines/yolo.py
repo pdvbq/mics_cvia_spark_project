@@ -19,8 +19,11 @@ class YoloPipeline(Pipeline):
         data = kwargs["dataset_metadata"]
         save_file = kwargs["train"].get("save_file", "")
         batch = kwargs["train"]["batch"]
-
-        self.model.train(data=data, epochs=epochs, batch=batch)
+        optimizer = kwargs["train"]["optimizer"]
+        cos_lr = kwargs["train"]["cos_lr"]
+        self.model.train(
+            data=data, epochs=epochs, batch=batch, cos_lr=cos_lr, optimizer=optimizer
+        )
 
         if save_file != "":
             self.model.save(save_file)
@@ -36,9 +39,10 @@ class YoloPipeline(Pipeline):
             writer = csv.writer(f)
             writer.writerow(["filename", "class", "bbox"])
             for result in track(results, description="Predicting...", total=total_imgs):
-                if result.boxes is None:
-                    continue
                 filename = os.path.basename(result.path)
+                if result.boxes is None:
+                    writer.writerow([filename, "", ""])
+                    continue
                 for box in result.boxes:
                     cls = result.names[box.cls.tolist()[0]]
                     xyxy = yolo_to_default_format(
