@@ -1,3 +1,4 @@
+from os.path import isdir
 from coloredlogs import logging
 import os
 from ultralytics import YOLO
@@ -21,8 +22,17 @@ class YoloPipeline(Pipeline):
         batch = kwargs["train"]["batch"]
         optimizer = kwargs["train"]["optimizer"]
         cos_lr = kwargs["train"]["cos_lr"]
+        lr0 = kwargs["train"]["lr0"]
+        lrf = kwargs["train"]["lrf"]
+
         self.model.train(
-            data=data, epochs=epochs, batch=batch, cos_lr=cos_lr, optimizer=optimizer
+            data=data,
+            epochs=epochs,
+            batch=batch,
+            optimizer=optimizer,
+            cos_lr=cos_lr,
+            lr0=lr0,
+            lrf=lrf,
         )
 
         if save_file != "":
@@ -32,6 +42,11 @@ class YoloPipeline(Pipeline):
         source = kwargs["test"]["source"]
         results = self.model.predict(source=source, stream=True, verbose=False)
         file = kwargs["test"]["output"]
+        dirname = os.path.dirname(file)
+
+        if not os.path.isdir(dirname):
+            logger.info(f"Save directory does not exist Creating it at {dirname}")
+            os.makedirs(dirname)
 
         total_imgs = len(os.listdir(source))
 
@@ -40,13 +55,15 @@ class YoloPipeline(Pipeline):
             writer.writerow(["filename", "class", "bbox"])
             for result in track(results, description="Predicting...", total=total_imgs):
                 filename = os.path.basename(result.path)
-                if result.boxes is None:
-                    writer.writerow([filename, "", ""])
-                    continue
+                # INFO: Trick in order to change extension type back to .png
+                # remove this in case it's fixed in codalab
+                filename = f"{filename.split('.')[0]}.png"
                 for box in result.boxes:
                     cls = result.names[box.cls.tolist()[0]]
-                    xyxy = yolo_to_default_format(
-                        *result.orig_shape, *result.boxes.xywhn.tolist()[0]
+                    xyxy = list(
+                        yolo_to_default_format(
+                            *result.orig_shape, *result.boxes.xywhn.tolist()[0]
+                        )
                     )
                     writer.writerow([filename, cls, xyxy])
 

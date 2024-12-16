@@ -41,13 +41,17 @@ class DownloadCfg:
 
 @dataclass
 class PipelineCfg:
-    frameworks: Dict[str, Dict[str, Any]] = field(
+    yolo: Dict[str, Any] = field(
         default_factory=lambda: {
-            "yolo": {
-                "input_size": (1024, 1024),
-                "confidence_threshold": 0.5,
-                "nms_threshold": 0.4,
-            }
+            "input_size": [1024, 1024],
+            "train": {
+                "epochs": 100,
+                "batch": 0.95,
+                "optimizer": "auto",
+                "cos_lr": False,
+                "lr0": 0.01,
+                "lrf": 0.01,
+            },
         }
     )
 
