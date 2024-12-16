@@ -11,7 +11,7 @@ def default_to_yolo_format(
 
 
 def yolo_to_default_format(
-    image_w: int, image_h: int, x: float, y: float, w: int, h: int
+    image_w: int, image_h: int, x: float, y: float, w: float, h: float
 ) -> tuple[int, int, int, int]:
     c_min, r_min = (x - w / 2) * image_w, (y - h / 2) * image_h
     c_max, r_max = (x + w / 2) * image_w, (y + h / 2) * image_h
