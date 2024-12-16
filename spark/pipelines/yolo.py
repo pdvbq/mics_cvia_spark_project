@@ -56,19 +56,19 @@ class YoloPipeline(Pipeline):
             for result in track(results, description="Predicting...", total=total_imgs):
                 filename = os.path.basename(result.path)
                 filename = f"{filename.split('.')[0]}.png"
-                if result.boxes is None:
-                    writer.writerow([filename, "", ""])
+                if result.boxes is None or len(result.boxes) == 0:
+                    writer.writerow([filename, "", []])
                     continue
                 # INFO: Trick in order to change extension type back to .png
                 # remove this in case it's fixed in codalab
-                for box in result.boxes:
-                    cls = result.names[box.cls.tolist()[0]]
-                    xyxy = list(
-                        yolo_to_default_format(
-                            *result.orig_shape, *result.boxes.xywhn.tolist()[0]
-                        )
+                box = result.boxes[0]
+                cls = result.names[box.cls.tolist()[0]]
+                xyxy = list(
+                    yolo_to_default_format(
+                        *result.orig_shape, *result.boxes.xywhn.tolist()[0]
                     )
-                    writer.writerow([filename, cls, xyxy])
+                )
+                writer.writerow([filename, cls, xyxy])
 
     def validate(self, **kwargs):
         data = kwargs["dataset_metadata"]
