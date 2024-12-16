@@ -16,4 +16,4 @@ def yolo_to_default_format(
     c_min, r_min = (x - w / 2) * image_w, (y - h / 2) * image_h
     c_max, r_max = (x + w / 2) * image_w, (y + h / 2) * image_h
 
-    return int(c_min), int(r_min), int(c_max), int(r_max)
+    return int(r_min), int(c_min), int(r_max), int(c_max)
