@@ -7,7 +7,7 @@ app = typer.Typer()
 
 @app.command()
 def yolo(instruction: str):
-    config = settings.pipeline_cfg.frameworks["yolo"]
+    config = settings.pipeline_cfg.yolo
     pipeline = YoloPipeline(config["model_input"])
 
     if instruction == "train":

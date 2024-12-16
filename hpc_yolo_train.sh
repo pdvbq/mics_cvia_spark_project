@@ -4,7 +4,7 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH -c 17
 #SBATCH -G 1
-#SBATCH --time=10:00:00
+#SBATCH --time=1:00:00
 #SBATCH --partition gpu
 #SBATCH --qos normal
 
@@ -14,4 +14,4 @@ module purge || print_error_and_exit "No 'module' command"
 
 nvidia-smi
 
-uv run main.py pipeline yolo train
+uv run main.py pipeline yolo test
