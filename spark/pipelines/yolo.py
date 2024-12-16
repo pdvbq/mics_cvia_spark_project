@@ -55,9 +55,12 @@ class YoloPipeline(Pipeline):
             writer.writerow(["filename", "class", "bbox"])
             for result in track(results, description="Predicting...", total=total_imgs):
                 filename = os.path.basename(result.path)
+                filename = f"{filename.split('.')[0]}.png"
+                if result.boxes is None:
+                    writer.writerow([filename, "", ""])
+                    continue
                 # INFO: Trick in order to change extension type back to .png
                 # remove this in case it's fixed in codalab
-                filename = f"{filename.split('.')[0]}.png"
                 for box in result.boxes:
                     cls = result.names[box.cls.tolist()[0]]
                     xyxy = list(
