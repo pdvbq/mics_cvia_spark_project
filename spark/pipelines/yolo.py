@@ -62,7 +62,14 @@ class YoloPipeline(Pipeline):
                     writer.writerow([filename, "", []])
                     continue
 
-                box = result.boxes[0]
+                best_box = [0, 0]
+                for idx, box in enumerate(result.boxes):
+                    conf = box.conf.tolist()[0]
+                    if conf > best_box[0]:
+                        best_box[0] = conf
+                        best_box[1] = idx
+
+                box = result.boxes[best_box[1]]
                 cls = result.names[box.cls.tolist()[0]]
                 xyxy = list(
                     yolo_to_default_format(*result.orig_shape, *box.xywhn.tolist()[0])
