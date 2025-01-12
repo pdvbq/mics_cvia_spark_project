@@ -1,5 +1,6 @@
 import typer
 from spark.pipelines.yolo import YoloPipeline
+from spark.pipelines.maskrcnn import MaskRCNNPipeline
 from spark.settings import settings
 
 app = typer.Typer()
@@ -10,6 +11,17 @@ def yolo(instruction: str):
     config = settings.pipeline_cfg.yolo
     pipeline = YoloPipeline(config["model_input"])
 
+    if instruction == "train":
+        pipeline.train(**config)
+    elif instruction == "val":
+        pipeline.validate(**config)
+    elif instruction == "test":
+        pipeline.test(**config)
+
+@app.command()
+def maskrcnn(instruction: str):
+    config = settings.pipeline_cfg.maskrcnn
+    pipeline = MaskRCNNPipeline()
     if instruction == "train":
         pipeline.train(**config)
     elif instruction == "val":

@@ -11,16 +11,22 @@ from spark.utils.dataset import SparkDataset
 
 class MaskRCNNPipeline(Pipeline):
     def __init__(self):
-        self.device = "cpu"
+        self.device = "cuda:0" if torch.cuda.is_available else "cpu"
         self.model = maskrcnn_resnet50_fpn_v2(num_classes=11)
         self.optim = optim.AdamW(self.model.parameters(), lr=0.005)
         self.num_epochs = 5
-        self.train_ds = SparkDataset(DetectionDatasetCfg().class_map, split="train")
-        self.val_ds = SparkDataset(DetectionDatasetCfg().class_map, split="validation")
-        self.test_ds = SparkDataset(DetectionDatasetCfg().class_map, split="test")
+        self.train_ds = SparkDataset(
+            DetectionDatasetCfg().class_map, root_dir="data/stream1", split="train"
+        )
+        self.val_ds = SparkDataset(
+            DetectionDatasetCfg().class_map, root_dir="data/stream1", split="validation"
+        )
+        # self.test_ds = SparkDataset(
+        #     DetectionDatasetCfg().class_map, root_dir="data/stream1", split="test"
+        # )
         self.train_dl = DataLoader(self.train_ds, batch_size=64, shuffle=True)
         self.val_dl = DataLoader(self.val_ds, batch_size=64, shuffle=True)
-        self.test_dl = DataLoader(self.test_ds, batch_size=64, shuffle=True)
+        # self.test_dl = DataLoader(self.test_ds, batch_size=64, shuffle=True)
         # self.
 
     def train(self, **kwargs):
@@ -54,3 +60,8 @@ class MaskRCNNPipeline(Pipeline):
                 labels = list(label_batch.to(self.device))
                 loss_dict = self.model(images, labels)
                 losses = sum(loss for loss in loss_dict.values())
+
+
+if __name__ == "__main__":
+    pipeline = MaskRCNNPipeline()
+    pipeline.train()
