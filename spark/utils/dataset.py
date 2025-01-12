@@ -29,7 +29,8 @@ class SparkDataset(Dataset):
 
         self.detection = detection
         self.split = split
-        self.root_dir = os.path.join(root_dir, self.split)
+        # self.root_dir = os.path.join(root_dir, self.split)
+        self.root_dir = os.path.join(root_dir, "images", self.split)
 
         self.labels = process_labels(root_dir, split)
 
