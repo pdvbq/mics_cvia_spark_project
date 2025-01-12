@@ -12,7 +12,6 @@ class ImgTransform(Compose):
             transforms.Normalize(mean=mean, std=std)
         ])
     def __call__(self, image):
-        import pdb; pdb.set_trace()
         if isinstance(image, np.ndarray):
             image = F.to_pil_image(image)
         return super().__call__(image)
