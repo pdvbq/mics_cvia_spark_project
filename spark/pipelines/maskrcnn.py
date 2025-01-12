@@ -3,7 +3,6 @@ from torch import nn, optim, split
 from torch.utils.data import DataLoader
 from torchvision.models.detection import maskrcnn_resnet50_fpn_v2
 
-from spark.models.maskrcnn import init_maskrcnn
 from spark.pipelines.pipeline import Pipeline
 from spark.settings import DetectionDatasetCfg
 from spark.utils.dataset import SparkDataset
