@@ -15,10 +15,10 @@ class MaskRCNNPipeline(Pipeline):
         self.optim = optim.AdamW(self.model.parameters(), lr=0.005)
         self.num_epochs = 5
         self.train_ds = SparkDataset(
-            DetectionDatasetCfg().class_map, root_dir="data/stream1", split="train"
+            DetectionDatasetCfg().class_map, root_dir="../datasets/stream1", split="train"
         )
         self.val_ds = SparkDataset(
-            DetectionDatasetCfg().class_map, root_dir="data/stream1", split="validation"
+            DetectionDatasetCfg().class_map, root_dir="../datasets/stream1", split="validation"
         )
         # self.test_ds = SparkDataset(
         #     DetectionDatasetCfg().class_map, root_dir="data/stream1", split="test"
