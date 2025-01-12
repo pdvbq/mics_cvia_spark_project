@@ -21,7 +21,7 @@ def yolo(instruction: str):
 @app.command()
 def maskrcnn(instruction: str):
     config = settings.pipeline_cfg.maskrcnn
-    pipeline = MaskRCNNPipeline()
+    pipeline = MaskRCNNPipeline(config)
     if instruction == "train":
         pipeline.train(**config)
     elif instruction == "val":
