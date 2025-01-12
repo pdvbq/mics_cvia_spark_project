@@ -54,6 +54,19 @@ class PipelineCfg:
             },
         }
     )
+    maskrcnn: Dict[str, Any] = field(
+        default_factory=lambda: {
+            "input_size": [1024, 1024],
+            "train": {
+                "epochs": 100,
+                "batch": 64,
+                "optimizer": "SGD",
+                "cos_lr": False,
+                "lr0": 0.01,
+                "lrf": 0.01,
+            },
+        }
+    )
 
 
 @dataclass
