@@ -1,7 +1,7 @@
 from os.path import isdir
 from coloredlogs import logging
 import os
-from ultralytics import YOLO
+from ultralytics import RTDETR
 import csv
 from spark.pipelines.pipeline import Pipeline
 from spark.converters.labels import yolo_to_default_format
@@ -11,9 +11,9 @@ from rich.progress import track
 logger = logging.getLogger(__name__)
 
 
-class YoloPipeline(Pipeline):
+class RTDETRPipeline(Pipeline):
     def __init__(self, model_path: str):
-        self.model = YOLO(model_path)
+        self.model = RTDETR(model_path)
 
     def train(self, **kwargs):
         epochs = kwargs["train"]["epochs"]
@@ -24,9 +24,6 @@ class YoloPipeline(Pipeline):
         cos_lr = kwargs["train"]["cos_lr"]
         lr0 = kwargs["train"]["lr0"]
         lrf = kwargs["train"]["lrf"]
-        augment = kwargs["train"]["augment"]
-        patience = kwargs["train"]["patience"]
-        dropout = kwargs["train"]["dropout"]
 
         self.model.train(
             data=data,
@@ -36,9 +33,6 @@ class YoloPipeline(Pipeline):
             cos_lr=cos_lr,
             lr0=lr0,
             lrf=lrf,
-            augment=augment,
-            patience=patience,
-            dropout=dropout,
         )
 
         if save_file != "":
