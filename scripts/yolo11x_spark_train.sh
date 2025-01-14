@@ -2,9 +2,9 @@
 ### Request one GPU tasks for 4 hours - dedicate 1/4 of available cores for its management
 #SBATCH -N 1
 #SBATCH --ntasks-per-node=1
-#SBATCH -c 17
+#SBATCH -c 14
 #SBATCH -G 1
-#SBATCH --time=1:00:00
+#SBATCH --time=27:00:00
 #SBATCH --partition gpu
 #SBATCH --qos normal
 
@@ -14,4 +14,4 @@ module purge || print_error_and_exit "No 'module' command"
 
 nvidia-smi
 
-uv run main.py pipeline yolo test
+uv run main.py pipeline yolo train

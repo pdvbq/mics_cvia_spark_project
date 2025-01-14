@@ -24,6 +24,9 @@ class YoloPipeline(Pipeline):
         cos_lr = kwargs["train"]["cos_lr"]
         lr0 = kwargs["train"]["lr0"]
         lrf = kwargs["train"]["lrf"]
+        augment = kwargs["train"]["augment"]
+        patience = kwargs["train"]["patience"]
+        dropout = kwargs["train"]["dropout"]
 
         self.model.train(
             data=data,
@@ -33,6 +36,9 @@ class YoloPipeline(Pipeline):
             cos_lr=cos_lr,
             lr0=lr0,
             lrf=lrf,
+            augment=augment,
+            patience=patience,
+            dropout=dropout,
         )
 
         if save_file != "":

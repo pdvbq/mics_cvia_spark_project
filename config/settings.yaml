@@ -57,6 +57,11 @@ pipeline:
       cos_lr: false
       lr0: 0.01
       lrf: 0.01
+      augment: false
+      patience: 10 # Wait for 10 epochs for early stopping
+      dropout: 0.0
+      save_period: 5 # Save a snapshot every 5 epochs
+      device: [0]
     test:
         source: "../datasets/stream1/images/test/"
         output: "./data/submission.csv"
