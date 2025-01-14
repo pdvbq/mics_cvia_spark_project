@@ -158,7 +158,7 @@ class FScore:
                 - 'macro': Calculate FScore for each class, then take the average.
                 - 'weighted': Calculate FScore for each class, weighted by class frequency.
                 - 'none': Return FScore for each class separately.
-            beta (float): Weight of recall in the FScore calculation. Default is 1 (F1 score).
+            beta (float): Weight of recall in the FScore calculation. Default is 2 (F2 score).
         """
         self.average = average
         self.beta = beta
@@ -328,10 +328,16 @@ class IoU:
 
 
 class MAPK:
-    def __init__(self):
-        pass
+    def __init__(self, k: int = 2):
+        """
+        Initialize the MAPK metric.
 
-    def __call__(self, y_true: Tensor, y_pred: Tensor, k: int = 2) -> Tensor:
+        Args:
+            k (int): Threshold value to consider top-k predictions. Default is 2.
+        """
+        self.k = k
+
+    def __call__(self, y_true: Tensor, y_pred: Tensor) -> Tensor:
         r""" This metric measures the mean average precision at a threshold K (mAP).
 
         The mAP is computed as:
@@ -343,7 +349,6 @@ class MAPK:
         Args:
             y_true (Tensor): Ground truth binary labels (0s and 1s).
             y_pred (Tensor): Predicted relevance scores or binary labels.
-            k (int): Threshold integer value.
 
         Examples::
 
@@ -351,9 +356,9 @@ class MAPK:
             >>> y_pred = torch.tensor([0.9,0.4,0.95,0.3,0.2,0.8,0.1]) # Predicted scores
             >>> k = 3 # threshold value
             >>> 
-            >>> mapk_metric = MAPK()
+            >>> mapk_metric = MAPK(k)
             >>> 
-            >>> mapk = mapk_metric(y_true.unsqueeze(0), y_pred.unsqueeze(0), k)
+            >>> mapk = mapk_metric(y_true.unsqueeze(0), y_pred.unsqueeze(0))
 
         """
         # Ensure ground truth values are binary
@@ -363,7 +368,7 @@ class MAPK:
 
         # Compute AP@k for each query
         for truth, pred in zip(y_true, y_pred):
-            ap_at_k = self.compute_ap_at_k(truth, pred, k)
+            ap_at_k = self.compute_ap_at_k(truth, pred, self.k)
             ap_list.append(ap_at_k)
 
         # Compute the mean of AP values
@@ -373,6 +378,11 @@ class MAPK:
     def compute_precision_at_k(self, y_true: Tensor, y_pred: Tensor, k: int) -> float:
         """
         Computes Precision@k given ground truth and predicted values.
+
+        Args:
+            y_true (Tensor): Ground truth binary labels (0s and 1s).
+            y_pred (Tensor): Predicted relevance scores or binary labels.
+            k (int): Threshold value to consider top-k predictions.
         """
         y_true = y_true[:k]
         y_pred = y_pred[:k]
@@ -392,6 +402,11 @@ class MAPK:
     def compute_ap_at_k(self, y_true: Tensor, y_pred: Tensor, k: int) -> float:
         """
         Computes the Average Precision@k for a single query.
+
+        Args:
+            y_true (Tensor): Ground truth binary labels (0s and 1s).
+            y_pred (Tensor): Predicted relevance scores or binary labels.
+            k (int): Threshold value to consider top-k predictions.
         """
         # Sort predictions and corresponding ground truth
         _, indices = torch.sort(y_pred, descending=True)
