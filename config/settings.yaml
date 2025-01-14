@@ -25,16 +25,38 @@ dataset:
     
 pipeline:
   yolo:
-    model_input: "./runs/detect/train10/weights/best.pt"
+    model_input: "yolo11x.pt"
+    # model_input: "/mnt/aiongpfs/users/pbastossoares/spark/runs/detect/train10/weights/best.pt"
     dataset_metadata: "/mnt/aiongpfs/users/pbastossoares/datasets/stream1.yaml"
     input_size: [1024, 1024] # Matches the image size of the dataset
     train: 
-      epochs: 100
+      epochs: 50
       batch: 0.95
+      optimizer: SGD
+      cos_lr: true
+      lr0: 0.001
+      lrf: 0.0001
+      augment: false
+      patience: 10 # Wait for 10 epochs for early stopping
+      dropout: 0.0
+      save_period: 5 # Save a snapshot every 5 epochs
+      device: [0]
+    test:
+        source: "/mnt/aiongpfs/users/pbastossoares/datasets/stream1/images/test/"
+        output: "./data/submission.csv"
+
+pipeline:
+  rtdetr:
+    model_input: "rtdetr-x.pt"
+    dataset_metadata: "../datasets/stream1/stream1.yaml"
+    input_size: [1024, 1024] # Matches the image size of the dataset
+    train: 
+      epochs: 5
+      batch: 0.80
       optimizer: auto
       cos_lr: false
       lr0: 0.01
       lrf: 0.01
     test:
-        source: "/mnt/aiongpfs/users/pbastossoares/datasets/stream1/images/test/"
+        source: "../datasets/stream1/images/test/"
         output: "./data/submission.csv"
