@@ -14,14 +14,21 @@ def generate_masks(boxes, image_size):
     Returns:
         torch.Tensor: Binary masks, shape (num_objects, height, width).
     """
+    base_size = 1024
     height, width = image_size
+    scale_h = height / base_size
+    scale_w = width / base_size
     masks = []
     for box in boxes:
         mask = np.zeros((height, width), dtype=np.uint8)
         x_min, y_min, x_max, y_max = map(int, box)
+        x_min = int(x_min / scale_w)
+        y_min = int(y_min / scale_h)
+        x_max = int(x_max / scale_w)
+        y_max = int(y_max / scale_h)
         mask[y_min:y_max, x_min:x_max] = 1
         masks.append(mask)
-    return torch.tensor(masks, dtype=torch.uint8)
+    return torch.tensor(np.array(masks), dtype=torch.uint8)
 
 def generate_sam_masks(img_path):
     # pip install git+https://github.com/facebookresearch/segment-anything.git
