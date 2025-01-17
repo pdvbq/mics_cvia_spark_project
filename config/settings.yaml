@@ -22,14 +22,14 @@ dataset:
     smart_1: 8
     soho: 9
     xmm_newton: 10
-    
+
 pipeline:
   yolo:
     model_input: "yolo11x.pt"
     # model_input: "/mnt/aiongpfs/users/pbastossoares/spark/runs/detect/train10/weights/best.pt"
     dataset_metadata: "/mnt/aiongpfs/users/pbastossoares/datasets/stream1.yaml"
     input_size: [1024, 1024] # Matches the image size of the dataset
-    train: 
+    train:
       epochs: 50
       batch: 0.95
       optimizer: SGD
@@ -42,15 +42,14 @@ pipeline:
       save_period: 5 # Save a snapshot every 5 epochs
       device: [0]
     test:
-        source: "/mnt/aiongpfs/users/pbastossoares/datasets/stream1/images/test/"
-        output: "./data/submission.csv"
+      source: "/mnt/aiongpfs/users/pbastossoares/datasets/stream1/images/test/"
+      output: "./data/submission.csv"
 
-pipeline:
   rtdetr:
-    model_input: "rtdetr-x.pt"
+    model_input: "/home/pedros/Downloads/best.pt"
     dataset_metadata: "../datasets/stream1/stream1.yaml"
     input_size: [1024, 1024] # Matches the image size of the dataset
-    train: 
+    train:
       epochs: 5
       batch: 0.80
       optimizer: auto
@@ -63,5 +62,13 @@ pipeline:
       save_period: 5 # Save a snapshot every 5 epochs
       device: [0]
     test:
-        source: "../datasets/stream1/images/test/"
-        output: "./data/submission.csv"
+      source: "../datasets/stream1/images/test/"
+      output: "./data/submission.csv"
+
+  yolort:
+    yolo_model_input: "./data/best_yolo_x_92epochs/weights/best.pt"
+    rt_model_input: "/home/pedros/Downloads/best.pt"
+
+    test:
+      source: "../datasets/stream1/images/test/"
+      output: "./data/yolort_submission.csv"
