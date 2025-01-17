@@ -80,6 +80,9 @@ class PipelineCfg:
             },
         }
     )
+    yolort: Dict[str, Any] = field(
+        default_factory=lambda: {}
+    )
 
 
 @dataclass
