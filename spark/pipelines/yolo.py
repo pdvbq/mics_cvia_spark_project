@@ -41,8 +41,8 @@ class YoloPipeline(Pipeline):
             augment=augment,
             patience=patience,
             dropout=dropout,
-            pretrained=pretrained
-            cls=cls
+            pretrained=pretrained,
+            cls=cls,
         )
 
         if save_file != "":
