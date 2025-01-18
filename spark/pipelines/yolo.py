@@ -27,6 +27,8 @@ class YoloPipeline(Pipeline):
         augment = kwargs["train"]["augment"]
         patience = kwargs["train"]["patience"]
         dropout = kwargs["train"]["dropout"]
+        pretrained = kwargs["train"]["pretrained"]
+        cls = kwargs["train"]["cls"]
 
         self.model.train(
             data=data,
@@ -39,6 +41,8 @@ class YoloPipeline(Pipeline):
             augment=augment,
             patience=patience,
             dropout=dropout,
+            pretrained=pretrained
+            cls=cls
         )
 
         if save_file != "":

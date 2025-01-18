@@ -28,11 +28,16 @@ class SparkDataset(Dataset):
         self.class_map = class_map
 
         self.detection = detection
-        self.split = split
+        self.split = split if split != "validation" else "val"
         # self.root_dir = os.path.join(root_dir, self.split)
         self.root_dir = os.path.join(root_dir, "images", self.split)
 
-        self.labels = process_labels(root_dir, split)
+        if split == "test":
+            self.labels = pd.DataFrame(
+                {"filename": os.listdir(self.root_dir), "class": "", "bbox": ""}
+            )
+        else:
+            self.labels = process_labels(root_dir, split)
 
         self.transform = transform
 

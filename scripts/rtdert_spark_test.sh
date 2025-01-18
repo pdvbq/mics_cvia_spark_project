@@ -3,16 +3,11 @@
 #SBATCH -N 1
 #SBATCH --ntasks-per-node=1
 #SBATCH -c 14
-#SBATCH -C volta32
-#SBATCH -G 1
-#SBATCH --time=27:00:00
+#SBATCH -G 0
+#SBATCH --time=00:20:00
 #SBATCH --partition gpu
 #SBATCH --qos normal
 
-
-print_error_and_exit() { echo "***ERROR*** $*"; exit 1; }
-module purge || print_error_and_exit "No 'module' command"
-
 nvidia-smi
 
-uv run main.py pipeline yolo train
+uv run main.py pipeline rtdetr test

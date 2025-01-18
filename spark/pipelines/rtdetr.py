@@ -24,6 +24,10 @@ class RTDETRPipeline(Pipeline):
         cos_lr = kwargs["train"]["cos_lr"]
         lr0 = kwargs["train"]["lr0"]
         lrf = kwargs["train"]["lrf"]
+        pretrained = kwargs["train"]["pretrained"]
+        patience = kwargs["train"]["patience"]
+        augment = kwargs["train"]["augment"]
+        dropout = kwargs["train"]["dropout"]
 
         self.model.train(
             data=data,
@@ -33,6 +37,10 @@ class RTDETRPipeline(Pipeline):
             cos_lr=cos_lr,
             lr0=lr0,
             lrf=lrf,
+            pretrained=pretrained,
+            patience=patience,
+            augment=augment,
+            dropout=dropout,
         )
 
         if save_file != "":

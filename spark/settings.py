@@ -56,12 +56,12 @@ class PipelineCfg:
     )
     maskrcnn: Dict[str, Any] = field(
         default_factory=lambda: {
-            "input_size": [1024, 1024],
+            "input_size": [256, 256],
             "train": {
-                "epochs": 100,
-                "batch": 64,
-                "optimizer": "SGD",
-                "cos_lr": False,
+                "epochs": 10,
+                "batch": 8,
+                "optimizer": "AdamW",
+                "scheduler": "cosine",
                 "lr0": 0.01,
                 "lrf": 0.01,
             },
@@ -79,6 +79,9 @@ class PipelineCfg:
                 "lrf": 0.01,
             },
         }
+    )
+    yolort: Dict[str, Any] = field(
+        default_factory=lambda: {}
     )
 
 

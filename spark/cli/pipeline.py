@@ -2,6 +2,7 @@ import typer
 from spark.pipelines.yolo import YoloPipeline
 from spark.pipelines.maskrcnn import MaskRCNNPipeline
 from spark.pipelines.rtdetr import RTDETRPipeline
+from spark.pipelines.yolort import YoloRTPipeline
 from spark.settings import settings
 
 app = typer.Typer()
@@ -40,4 +41,13 @@ def rtdetr(instruction: str):
     elif instruction == "val":
         pipeline.validate(**config)
     elif instruction == "test":
+        pipeline.test(**config)
+
+
+@app.command()
+def yolort(instruction: str):
+    config = settings.pipeline_cfg.yolort
+    pipeline = YoloRTPipeline(config["yolo_model_input"], config["rt_model_input"])
+
+    if instruction == "test":
         pipeline.test(**config)
