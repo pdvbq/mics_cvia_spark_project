@@ -92,9 +92,12 @@ class MaskRCNNPipeline(Pipeline):
 
         return "_".join(flags)
 
-    def __init__(self, config):
+    def __init__(self, config, timestamp=None):
         self.config = config
-        self.timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        if timestamp is not None:
+            self.timestamp = timestamp
+        else:
+            self.timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         self._make_output_dir()
         BATCH_SIZE = config["train"]["batch"]
 
@@ -110,6 +113,10 @@ class MaskRCNNPipeline(Pipeline):
             self.optim, T_max=config["train"]["epochs"]
         )
         self.num_epochs = config["train"]["epochs"]
+        if config["resume"] is not None:
+            self._load_model(
+                f"output/{self.exp_name}/{config['resume']}/model_9.pth"
+            )
         self.train_ds = SparkDataset(
             DetectionDatasetCfg().class_map,
             root_dir="../datasets/stream1",

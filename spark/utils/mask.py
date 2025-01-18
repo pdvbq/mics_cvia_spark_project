@@ -1,8 +1,12 @@
 import os
+import warnings
 from glob import glob
 import numpy as np
 import torch
-from segment_anything import SamAutomaticMaskGenerator, sam_model_registry
+try:
+    from segment_anything import SamAutomaticMaskGenerator, sam_model_registry
+except ImportError:
+    warnings.warn("segment_anything is not installed. Some functions will not work.")
 import cv2
 
 def generate_masks(boxes, image_size):

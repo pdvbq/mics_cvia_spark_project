@@ -65,6 +65,7 @@ class PipelineCfg:
                 "lr0": 0.01,
                 "lrf": 0.01,
             },
+            "resume": "20250115_192542"
         }
     )
     rtdetr: Dict[str, Any] = field(
