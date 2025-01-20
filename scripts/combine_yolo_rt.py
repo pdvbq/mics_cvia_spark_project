@@ -11,8 +11,8 @@ def averaged_bbox(bbox1, bbox2):
 
 
 if len(sys.argv) != 4:
-    print("You must pass 2 files as arguments.")
-    print("compare_results.py results1 results2")
+    print("You must pass 3 files as arguments.")
+    print("compare_results.py results1 results2 output")
     exit(1)
 res1_path = sys.argv[1]
 res2_path = sys.argv[2]
@@ -43,7 +43,7 @@ for ym, rtm in zip(yolo, rt):
         # ym_bbox = eval(ym["bbox"])
         # bbox = averaged_bbox(rtm_bbox, ym_bbox)
         # bbox = list(map(lambda x: 0 if x < 0 else x, bbox))
-        row = rtm
+        row = ym
         output.writerow(row)
     else:
         output.writerow(ym)
